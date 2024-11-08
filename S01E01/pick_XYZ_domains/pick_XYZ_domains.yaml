@@ -1,0 +1,96 @@
+description: "alice:pickDomains"
+
+prompts: [file://S01E01/pick_XYZ_domains/pick_XYZ_domains.js]
+
+providers:
+  - "openai:chat:gpt-4o-2024-08-06"
+
+tests:
+  - vars:
+      query: "What is the speed of light"
+    assert:
+      - type: is-json
+        value:
+          type: object
+          required: [queries]
+          properties:
+            queries:
+              type: array
+              maxItems: 0
+      - type: llm-rubric
+        value: "The response should return an empty array of queries, as the speed of light is a well-known constant that doesn't require a web search."
+
+  - vars:
+      query: "What are the steps to access XYZ?"
+    assert:
+      - type: is-json
+        value:
+          type: object
+          required: [queries]
+          properties:
+            queries:
+              type: array
+              items:
+                type: object
+                required: [q, url]
+                properties:
+                  q:
+                    type: string
+                  url:
+                    type: string
+      - type: contains
+        value: "xyz.ag3nts.org"
+      - type: contains
+        value: "login"
+      - type: llm-rubric
+        value: "The response should include queries about logging into the XYZ platform"
+
+  - vars:
+      query: "What is the login page for xyz.ag3nts.org?"
+    assert:
+      - type: is-json
+        value:
+          type: object
+          required: [queries]
+          properties:
+            queries:
+              type: array
+              items:
+                type: object
+                required: [q, url]
+                properties:
+                  q:
+                    type: string
+                  url:
+                    type: string
+      - type: contains
+        value: "xyz.ag3nts.org"
+      - type: contains
+        value: "login"
+      - type: llm-rubric
+        value: "The response should include queries specifically about the XYZ login page"
+
+  - vars:
+      query: "Tell me how to reset my XYZ password"
+    assert:
+      - type: is-json
+        value:
+          type: object
+          required: [queries]
+          properties:
+            queries:
+              type: array
+              items:
+                type: object
+                required: [q, url]
+                properties:
+                  q:
+                    type: string
+                  url:
+                    type: string
+      - type: contains
+        value: "xyz.ag3nts.org"
+      - type: contains
+        value: "password reset"
+      - type: llm-rubric
+        value: "The response should include queries about password reset functionality for XYZ"

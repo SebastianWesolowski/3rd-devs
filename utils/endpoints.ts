@@ -31,7 +31,20 @@ export const ENDPOINTS = {
     BY_ID: (id: string | number) => `/comments/${id}`,
     REPLIES: (commentId: string | number) => `/comments/${commentId}/replies`,
   },
+
+  // Centrala endpoints
+  CENTRALA: {
+    BASE: "https://centrala.ag3nts.org",
+    REPORT: "/report",
+  },
 } as const;
+
+// Add type for the Centrala report payload
+export interface CentralaReportPayload {
+  task: string;
+  apikey: string;
+  answer: unknown; // Using unknown to allow for different answer types
+}
 
 // Example usage with ApiUtils:
 /*

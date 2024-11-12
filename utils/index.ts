@@ -1,6 +1,10 @@
 import axios from "axios";
 import type { AxiosInstance, AxiosError, AxiosRequestConfig } from "axios";
-import { API_BASE_URL, ENDPOINTS } from "./endpoints";
+import {
+  API_BASE_URL,
+  ENDPOINTS,
+  type CentralaReportPayload,
+} from "./endpoints";
 
 interface ApiResponse<T = any> {
   data: T;
@@ -66,6 +70,39 @@ export class ApiUtils {
   ): Promise<T> {
     try {
       const response = await this.client.delete<T>(endpoint, config);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error as AxiosError);
+    }
+  }
+
+  /**
+   * Sends a report to Centrala
+   * @param task Task identifier
+   * @param apiKey API key
+   * @param answer Answer data (will be properly JSON formatted)
+   */
+  async sendCentralaReport<T = unknown>(
+    task: string,
+    apiKey: string,
+    answer: T
+  ): Promise<any> {
+    const payload: CentralaReportPayload = {
+      task,
+      apikey: apiKey,
+      answer, // Direct assignment ensures proper JSON formatting
+    };
+
+    try {
+      const response = await this.client.post(
+        `${ENDPOINTS.CENTRALA.BASE}${ENDPOINTS.CENTRALA.REPORT}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       throw this.handleError(error as AxiosError);

@@ -1,6 +1,6 @@
 import * as dotenv from "dotenv";
 import express from "express";
-import { OpenAIService } from "./OpenAIService";
+import { OpenAIService } from "s-utils-llm";
 import type {
   ChatCompletionMessageParam,
   ChatCompletionChunk,

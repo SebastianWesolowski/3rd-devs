@@ -2,9 +2,9 @@ import * as dotenv from "dotenv";
 import express, { type Request, type Response } from "express";
 import { promises as fs } from "fs";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
-import { CentralaService } from "s-utils-llm";
-import { ApiUtils } from "../utils";
 import { AppService } from "./services/AppService";
+import { ApiUtils } from "../utils";
+import { CentralaService } from "s-utils-llm";
 
 // Load environment variables
 dotenv.config();
@@ -20,15 +20,17 @@ const API_KEY = process.env.PERSONAL_API_KEY || "";
 // Initialize Express and Services
 const app = express();
 const appService = new AppService();
-const centralaService = new CentralaService();
-
 const apiUtils = new ApiUtils();
+const centralaService = new CentralaService();
 app.use(express.json());
 
 // Routes
 app.post(
-  "/api/s01e03",
-  async (req: Request & { body: { task?: string } }, res: Response) => {
+  "/api/s01e05",
+  async (
+    req: Request & { body: { messages?: Message[]; task?: string } },
+    res: Response
+  ) => {
     try {
       console.log("Received request:", new Date().toISOString());
 
@@ -36,12 +38,12 @@ app.post(
       await fs.writeFile("prompt.md", "");
 
       // Fetch data from Centrala
-      const centralData = await appService.fetchData();
+      const report = await appService.prepareReport();
 
       // // Send report to Centrala
       const centralaResponse = await centralaService.sendCentralaReport(
         req as any,
-        centralData
+        report
       );
       // Send response
       res.json({
@@ -60,5 +62,5 @@ app.post(
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
-  console.log(`Listening for POST requests at /api/s01e03`);
+  console.log(`Listening for POST requests at /api/s01e05`);
 });

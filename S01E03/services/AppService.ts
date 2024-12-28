@@ -1,6 +1,6 @@
 import { ApiUtils } from "../../utils";
 import * as dotenv from "dotenv";
-import { OpenAIService } from "../OpenAIService";
+import { OpenAIService } from "s-utils-llm";
 
 import * as fs from "fs/promises";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
@@ -14,7 +14,7 @@ interface CentralaResponse {
   [key: string]: any;
 }
 
-export class CentralaService {
+export class AppService {
   private apiUtils: ApiUtils;
   private baseUrl: string;
   private apiKey: string;

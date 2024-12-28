@@ -3,7 +3,7 @@ import * as fs from "fs/promises";
 import * as path from "path";
 import OpenAI from "openai";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
-import { OpenAIService } from "./OpenAIService";
+import { OpenAIService } from "s-utils-llm";
 import {
   normalizeQuestionPrompt,
   prepareAnswerQauestinPrompt,

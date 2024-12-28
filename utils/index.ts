@@ -76,39 +76,6 @@ export class ApiUtils {
     }
   }
 
-  /**
-   * Sends a report to Centrala
-   * @param task Task identifier
-   * @param apiKey API key
-   * @param answer Answer data (will be properly JSON formatted)
-   */
-  async sendCentralaReport<T = unknown>(
-    task: string,
-    apiKey: string,
-    answer: T
-  ): Promise<any> {
-    const payload: CentralaReportPayload = {
-      task,
-      apikey: apiKey,
-      answer, // Direct assignment ensures proper JSON formatting
-    };
-
-    try {
-      const response = await this.client.post(
-        `${ENDPOINTS.CENTRALA.BASE}${ENDPOINTS.CENTRALA.REPORT}`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      throw this.handleError(error as AxiosError);
-    }
-  }
-
   private handleError(error: AxiosError): Error {
     if (error.response) {
       console.error("Error response:", error.response.data);
